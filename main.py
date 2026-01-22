@@ -1,7 +1,16 @@
+from microbit import *
+import utime
 
-kendaraan = "mobil"
+uart.init(baudrate=115200, tx=pin16, rx=pin15)
 
-if kendaraan == "motor":
-    basic.show_string(" bayar 2000")
-if kendaraan == "mobil":
-    basic.show_string(" bayar 5000")
+def send(cmd, t=800):
+    uart.write(cmd + "\r\n")
+    sleep(t)
+
+send("AT")
+send('AT+CWJAP="abc","12345678"', 5000)
+
+while True:
+    temp = temperature()
+    http_put(temp)
+    utime.sleep(10)
